@@ -1,1 +1,23 @@
-<!DOCTYPE html><html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta http-equiv="X-UA-Compatible" content="ie=edge"> <title>Mini Chat</title> </head> <body> <h1> Chat with me</h1> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Mini Chat</title>
+</head>
+<body>
+    <h1> Chat with me</h1>
+    <div class = "js-messageList"></div>
+    <form class="js-nickname">
+        <input class="js-input" type= "text" placeholder="Nickname">
+    </form>
+    <form class="js-message">
+        <input class="js-input" type= "text" placeholder="Message">
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
