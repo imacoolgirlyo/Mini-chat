@@ -12,17 +12,13 @@ const express = require("express"),
     const handleListening = () => {
         console.log(`✅ Server Running on : http://localhost:${PORT}`);
     }
-
-    const handlemessage = (message) => {
-        console.log(message);
-    }
-
     // socket handler
     const handleSocketConnect = (socket) => {
-        console.log(socket.id);
-       socket.on('message', handlemessage);
-    
+       socket.on('message', data => {
+            socket.broadcast.emit('new message', data);
+       });
     }
+
     server.listen(PORT, handleListening);
     app.use(logger("dev"));
     app.use(express.static(path.join(__dirname, "public")));

@@ -14,30 +14,46 @@ messageForm.style.display = "none";
 const setNickname = event => {
     event.preventDefault();
     const InputValue = nicknameInput.value;
+
    localStorage.setItem(
        NICKNAME, InputValue);
-    // nickName = nick; : 이건 왜 있는거징..
+
+    nickName = nicknameInput.value;
     nicknameForm.style.display = "none";
     messageForm.style.display = "block";
 }
 
-const addMessage = message => {
-    const messagediv = document.createElement('div');
+const addMessage = (message, creator) => {
+    console.log(message, creator);
+
+    const messageCreator = document.createElement("div");
+    messageCreator.innerHTML = creator;
+    messageCreator.classList.add("message__creator");
     const messageContent = document.createTextNode(message);
 
-    messagediv.appendChild(messageContent);
-    messageList.appendChild(messagediv);
+    const messageContatiner = document.createElement('div');
+
+    messageContatiner.appendChild(messageCreator);
+    messageContatiner.appendChild(messageContent);
+    messageContatiner.classList.add('message__container');
+
+    messageList.appendChild(messageContatiner);
+
     
 }
 
-const submitMessage = () => {
+const submitMessage = (event) => {
     event.preventDefault();
     const message = messageInput.value;
-    socket.emit("message", message);
+    socket.emit("message", {text: message, creator: nickName});
     messageInput.value = "";
-    addMessage(message);
+    addMessage(message, nickName);
 
 }
+
+socket.on("new message", data => {
+    addMessage(data.text, data.creator);
+});
 
 nicknameForm.addEventListener('submit', setNickname);
 messageForm.addEventListener('submit', submitMessage);

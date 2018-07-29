@@ -1,0 +1,13 @@
+.js-messageList{
+    list-style: none;
+    background-color: rgb(36, 175, 180);
+}
+
+.message__container{
+    display: flex;
+}
+
+.message__creator{
+    margin-right: 10px;
+    font-weight: 600;
+}
