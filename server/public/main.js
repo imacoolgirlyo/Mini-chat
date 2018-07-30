@@ -3,13 +3,21 @@ const socket = io(),
     nicknameInput = nicknameForm.querySelector('.js-input'),
     messageForm = document.querySelector('.js-message'),
     messageInput = messageForm.querySelector('.js-input'),
-    messageList = document.querySelector('.js-messageList');
+    messageList = document.querySelector('.js-messageList'),
+    creatorCSS = document.querySelector('.js-creator');
 
 
 const NICKNAME = "nickname";
+const YOURS = "yours";
+const MINE = "mine";
 
 let nickName = localStorage.getItem(NICKNAME);
 messageForm.style.display = "none";
+
+if(nickName){
+    messageForm.style.display = "block";
+    nicknameForm.style.display = "none";
+}
 
 const setNickname = event => {
     event.preventDefault();
@@ -24,36 +32,52 @@ const setNickname = event => {
 }
 
 const addMessage = (message, creator) => {
-    console.log(message, creator);
 
-    const messageCreator = document.createElement("div");
-    messageCreator.innerHTML = creator;
-    messageCreator.classList.add("message__creator");
-    const messageContent = document.createTextNode(message);
+    const newMessage = document.createElement("li");
+    const MessageContent = document.createTextNode(message);
 
-    const messageContatiner = document.createElement('div');
+    const MessageCreator = document.createElement("div");
+    MessageCreator.classList.add('js-creator');
+    MessageCreator.innerHTML =  creator;
 
-    messageContatiner.appendChild(messageCreator);
-    messageContatiner.appendChild(messageContent);
-    messageContatiner.classList.add('message__container');
-
-    messageList.appendChild(messageContatiner);
-
+    newMessage.appendChild(MessageCreator);
+    newMessage.appendChild(MessageContent);
     
+   let CSS = (creator === nickName ? "MINE_CLASS" : "YOURS_CLASS");
+   newMessage.classList.add(CSS);
+
+   messageList.appendChild(newMessage);
+
 }
 
+const getHistory = () => {
+    console.log("this is client")
+    fetch("/messages")
+    .then(response => response.json())
+    .then(data => {
+        const { messages } = data;
+        messages.forEach(message =>
+            addMessage(`${message.message}`,`${message.creator}` )
+        )
+    })
+}
+// message from me
 const submitMessage = (event) => {
     event.preventDefault();
     const message = messageInput.value;
-    socket.emit("message", {text: message, creator: nickName});
+    socket.emit("new message sent", {message, creator : nickName});
     messageInput.value = "";
     addMessage(message, nickName);
 
 }
 
-socket.on("new message", data => {
-    addMessage(data.text, data.creator);
+// message from others
+socket.on("notification", data => {
+    const {message, creator} = data;
+    addMessage(`${message}`, `${creator}`);
 });
+
+getHistory();
 
 nicknameForm.addEventListener('submit', setNickname);
 messageForm.addEventListener('submit', submitMessage);

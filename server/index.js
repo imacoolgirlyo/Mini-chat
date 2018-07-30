@@ -5,7 +5,11 @@ const express = require("express"),
     logger = require("morgan"),
     app = express(),
     server = http.createServer(app),
-    io = socketIO(server);
+    io = socketIO(server),
+    db = require('./db'),
+    Message = require('./models');
+    
+    console.log(db);
 
     const PORT = 4000;
 
@@ -14,10 +18,22 @@ const express = require("express"),
     }
     // socket handler
     const handleSocketConnect = (socket) => {
-       socket.on('message', data => {
-            socket.broadcast.emit('new message', data);
+       socket.on('new message sent', data => {
+           const {message , creator} = data;
+           Message.create({
+               message,
+               creator
+           });
+            socket.broadcast.emit('notification', data);
        });
     }
+
+    const handleGetMessages = (req, res) => {
+        console.log("this is server")
+        Message.find().then(messages => res.json({messages}));
+    }
+
+    app.get("/messages", handleGetMessages);
 
     server.listen(PORT, handleListening);
     app.use(logger("dev"));
