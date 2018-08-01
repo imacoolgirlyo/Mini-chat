@@ -4,8 +4,8 @@
     
 }
 
-
 body{
+   
     background-image: linear-gradient(
     68.6deg,
     rgba(229, 113, 87, 1) 0.4%,
@@ -22,47 +22,47 @@ h1{
 }
 
 .js-messageList{
+    width:100%;
+    height: 80vh;
     display: flex;
     list-style: none;
     padding: 0;
     flex-direction: column;
-
+    overflow: scroll;
+    /* 왜....... 메세지 사이즈가 0이 되지 이거하면...ㅠ */
 }
 
 input {
     border: none;
     padding: 10px;
-    width: 600px;
+    width: 100%;
     border-radius: 10px;
     align-self: center;
+    bottom : 0;
 }
 
-.message__container{
-    display: flex;
+li{
+    max-width: 200px;
 }
-
-.js-creator{
-    margin-right: 10px;
-    font-weight: 400;
-}
-
 
 .MINE_CLASS {
-    margin: 3px;
+   height: 100%;
+   font-size: 12px;
+    margin: 10px;
     align-self: flex-end;
     padding : 5px;
     border-radius: 7px;
     color: rgb(85, 69, 41);
-    display: flex;
+
     background-color: rgb(236, 220, 125)
 }
 
 .YOURS_CLASS {
+    font-size: 12px;
     margin: 3px;
     align-self: flex-start;
     padding : 5px;
     border-radius: 7px;
     color: rgb(85, 69, 41);
-    display: flex;
     background-color: rgb(191, 235, 243);
 }

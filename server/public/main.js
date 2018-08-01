@@ -6,7 +6,6 @@ const socket = io(),
     messageList = document.querySelector('.js-messageList'),
     creatorCSS = document.querySelector('.js-creator');
 
-
 const NICKNAME = "nickname";
 const YOURS = "yours";
 const MINE = "mine";
@@ -34,13 +33,8 @@ const setNickname = event => {
 const addMessage = (message, creator) => {
 
     const newMessage = document.createElement("li");
-    const MessageContent = document.createTextNode(message);
-
-    const MessageCreator = document.createElement("div");
-    MessageCreator.classList.add('js-creator');
-    MessageCreator.innerHTML =  creator;
-
-    newMessage.appendChild(MessageCreator);
+    const MessageContent = document.createTextNode(creator + " " +message);
+    
     newMessage.appendChild(MessageContent);
     
    let CSS = (creator === nickName ? "MINE_CLASS" : "YOURS_CLASS");
@@ -68,7 +62,7 @@ const submitMessage = (event) => {
     socket.emit("new message sent", {message, creator : nickName});
     messageInput.value = "";
     addMessage(message, nickName);
-
+    messageList.scrollTop = messageList.scrollHeight;
 }
 
 // message from others
