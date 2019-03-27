@@ -4,11 +4,14 @@ const socket = io(),
     messageForm = document.querySelector('.js-message'),
     messageInput = messageForm.querySelector('.js-input'),
     messageList = document.querySelector('.js-messageList'),
-    creatorCSS = document.querySelector('.js-creator');
+    creatorCSS = document.querySelector('.js-creator'),
+    closingChat = document.querySelector('.js-out');
 
 const NICKNAME = "nickname";
 const YOURS = "yours";
 const MINE = "mine";
+
+console.log(socket);
 
 let nickName = localStorage.getItem(NICKNAME);
 messageForm.style.display = "none";
@@ -33,7 +36,7 @@ const setNickname = event => {
 const addMessage = (message, creator) => {
 
     const newMessage = document.createElement("li");
-    const MessageContent = document.createTextNode(creator + " " +message);
+    const MessageContent = document.createTextNode(creator + " : " +message);
     
     newMessage.appendChild(MessageContent);
     
@@ -65,6 +68,10 @@ const submitMessage = (event) => {
     messageList.scrollTop = messageList.scrollHeight;
 }
 
+const closeChat = () => {
+    log()
+}
+
 // message from others
 socket.on("notification", data => {
     const {message, creator} = data;
@@ -73,5 +80,7 @@ socket.on("notification", data => {
 
 getHistory();
 
+closingChat.addEventListener('click', closeChat);
 nicknameForm.addEventListener('submit', setNickname);
 messageForm.addEventListener('submit', submitMessage);
+

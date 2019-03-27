@@ -10,15 +10,22 @@ const express = require("express"),
     Message = require('./models');
     
     console.log(db);
+    console.log(io);
 
     const PORT = 4000;
 
     const handleListening = () => {
         console.log(`✅ Server Running on : http://localhost:${PORT}`);
     }
+
+    const disconnect = () => {
+        console.log("disconnecti");
+    }
     // socket handler
     const handleSocketConnect = (socket) => {
+        
        socket.on('new message sent', data => {
+        
            const {message , creator} = data;
            Message.create({
                message,
@@ -26,6 +33,7 @@ const express = require("express"),
            });
             socket.broadcast.emit('notification', data);
        });
+       
     }
 
     const handleGetMessages = (req, res) => {
